@@ -2,6 +2,37 @@
 
 import string
 import urllib
+import re
+
+# грузим базу котировок (с заданным интервалом)
+def make_data_quotes(folder, qlist, interval, period):
+	df, mf, yf, dt, mt, yt = period
+	symbols = get_symbols(qlist)
+	i, n  = 0, len(symbols)
+	for symb in symbols:
+		i += 1
+		q = quote(interval, int(symb[0]))
+		print 'Загружаем', symb[1], ' (', i, 'из', n, ')'
+		q.load_quotes(df, mf, yf, dt, mt, yt)
+		q.save(folder + symb[0] + '_' + str(interval) + '.csv')
+
+
+# определяем наименование акции по ее "финамовскому" номеру
+def get_symb_name(symbols, number):
+	res = ''
+	for symb in symbols:
+		if int(symb[0]) == number:
+			res = symb[1]
+			break
+	return res
+
+# загрузка соответствий "финамовский номер" - "название акции"
+def get_symbols(fname):
+	f = open(fname, 'r')
+	txt = f.read()
+	f.close()
+	symbols = re.findall(r'<a href="/analysis/charts/default.asp\?id=([^"]+)" target=_blank>([^<]+)</a>', txt)
+	return symbols
 
 # загрузка котировок
 def get_quotes(df, mf, yf, dt, mt, yt, simb, period):
