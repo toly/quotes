@@ -35,9 +35,9 @@ def get_symbols(fname):
 	return symbols
 
 # загрузка котировок
-def get_quotes(df, mf, yf, dt, mt, yt, simb, period):
+def get_quotes(df, mf, yf, dt, mt, yt, symb, period):
     f = urllib.urlopen('http://195.128.78.52/GAZP_080201_100208.txt?d=d&market=1&em=' +
-        str(simb)+'&df='+str(df)+'&mf='+str(mf)+'&yf='+str(yf)+'&dt='+str(dt)+'&mt='
+        str(symb)+'&df='+str(df)+'&mf='+str(mf)+'&yf='+str(yf)+'&dt='+str(dt)+'&mt='
         +str(mt)+'&yt='+str(yt)+'&p='+str(period)
        	+'&f=GAZP_080201_100208&e=.txt&cn=GAZP&dtf=4&tmf=4&MSOR=0&sep=1&sep2=1&datf=5&at=1')
     quot = f.read()
@@ -47,13 +47,13 @@ def get_quotes(df, mf, yf, dt, mt, yt, simb, period):
 class quote(object):
 	# инициализация: по умолчанию грузим газпром часовик
 	# обозначения периодов 1 - тики, 2 - минуты, 3 - 5 минут, 7 - 1 час, 8 - день
-	def __init__(self, period=7, simb=16842):
+	def __init__(self, period=7, symb=16842):
 		# "сырые" данные которовок - массив строк
 		self.raw_data = []
 		# развернутые данные - open, high, low, close, volume
 		self.open, self.high, self.low, self.close, self.volume = [], [], [], [], []
 		# номер торгового инструмента (по финаму)
-		self.simb = simb
+		self.symb = symb
 		# период
 		self.period = period
 	
