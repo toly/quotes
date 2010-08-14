@@ -51,7 +51,7 @@ class quote(object):
 		# "сырые" данные которовок - массив строк
 		self.raw_data = []
 		# развернутые данные - open, high, low, close, volume
-		self.open, self.high, self.low, self.close, self.volume = [], [], [], [], []
+		self.op, self.hi, self.lo, self.cl, self.vol = [], [], [], [], []
 		# номер торгового инструмента (по финаму)
 		self.symb = symb
 		# период
@@ -59,18 +59,18 @@ class quote(object):
 	
 	# распаковка "сырых" данных
 	def decomp(self):
-		self.open, self.hight, self.low, self.close, self.volume = [], [], [], [], []
+		self.op, self.hi, self.lo, self.cl, self.vol = [], [], [], [], []
 		for line in self.raw_data:
 			mix = string.split(line, ',')[2:7]
-			self.open.append(float(mix[0]))
-			self.high.append(float(mix[1]))
-			self.low.append(float(mix[2]))
-			self.close.append(float(mix[3]))
-			self.volume.append(int(mix[4]))
+			self.op.append(float(mix[0]))
+			self.hi.append(float(mix[1]))
+			self.lo.append(float(mix[2]))
+			self.cl.append(float(mix[3]))
+			self.vol.append(int(mix[4]))
 	
 	# грузим котировки из инета
 	def load_quotes(self, df, mf, yf, dt, mt, yt):
-		self.raw_data = get_quotes(df, mf, yf, dt, mt, yt, self.simb, self.period)
+		self.raw_data = get_quotes(df, mf, yf, dt, mt, yt, self.symb, self.period)
 		self.decomp()
 
 	# записываем котировки в файл (сырые)
