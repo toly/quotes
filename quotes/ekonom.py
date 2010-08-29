@@ -3,7 +3,7 @@ import quotes
 
 # расчет прогнозных значений методом Хольта
 # на вход подается массив, на выходе - массив(несмещенный)
-def halt(x, a, b):
+def halt(x, a, b, t=1.):
 	y, y1, y2 = [], [], []
 	for i in xrange(len(x)):
 		if i == 0:
@@ -18,7 +18,7 @@ def halt(x, a, b):
 			continue
 		y1.append( a*x[i-1] + (1. - a)*(y1[-1] - y2[-1]) )
 		y2.append( b*(y1[-1] -y1[-2]) + (1. - b)*y2[-1]  )
-		y.append(y1[-1] + y2[-1])
+		y.append(y1[-1] + y2[-1]*t)
 	return y
 
 # наследуем ранее созданный класс quote
@@ -69,11 +69,11 @@ class quote(quotes.quote):
 			if i == 0:
                 		res.append(x[i])
             		else:
-                		ema = a * x[i] + (1.0 - a) * res[-1]
+                		ema = a * x[i-1] + (1.0 - a) * res[-1]
                 		res.append(ema)
         	return res
 
-	def halt(self, a, b, price='c'):
+	def halt(self, a, b, t=1., price='c'):
 		# выбор цены для рассчета
 		if price == 'c':
 			x = self.cl
@@ -85,4 +85,4 @@ class quote(quotes.quote):
 			x = self.lo
 		else:
 			x = []
-		return halt(x, a, b)
+		return halt(x, a, b, t)
